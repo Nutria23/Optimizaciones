@@ -10,31 +10,23 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden}
- 
-/* BG - uses transform/opacity only for GPU compositing */
 .bg-base{position:fixed;inset:0;z-index:0;background:
   radial-gradient(ellipse 55% 50% at 15% 40%,rgba(124,58,237,.16) 0%,transparent 70%),
   radial-gradient(ellipse 45% 55% at 85% 20%,rgba(0,180,220,.13) 0%,transparent 65%),
-  radial-gradient(ellipse 40% 40% at 65% 80%,rgba(255,107,53,.07) 0%,transparent 60%),
-  #060912}
+  radial-gradient(ellipse 40% 40% at 65% 80%,rgba(255,107,53,.07) 0%,transparent 60%),#060912}
 .bg-grid{position:fixed;inset:0;z-index:0;
   background-image:linear-gradient(rgba(0,220,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,220,255,.02) 1px,transparent 1px);
-  background-size:55px 55px;
-  will-change:background-position;
-  animation:grid 28s linear infinite}
+  background-size:55px 55px;will-change:background-position;animation:grid 28s linear infinite}
 @keyframes grid{to{background-position:55px 55px}}
- 
-/* PARTICLES - canvas, GPU composited */
 #pc{position:fixed;inset:0;z-index:0;pointer-events:none;will-change:transform}
  
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;
-  background:rgba(6,9,18,.78);backdrop-filter:blur(20px) saturate(1.4);
+  background:rgba(6,9,18,.82);backdrop-filter:blur(22px) saturate(1.4);
   border-bottom:1px solid rgba(0,220,255,.1);
   padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:66px}
 .logo{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;
-  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  position:relative}
+  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative}
 .logo span{position:absolute;top:-3px;right:-38px;font-size:9px;letter-spacing:2px;
   background:var(--o);color:#fff;padding:2px 5px;border-radius:2px;-webkit-text-fill-color:#fff}
 .nav-links{display:flex;gap:2.5rem;align-items:center}
@@ -43,6 +35,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;
 .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
   background:var(--c);transform:scaleX(0);transition:transform .2s;transform-origin:left}
 .nav-links a:hover{color:#fff}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:12px}
+ 
+/* CART BUTTON NAV */
+.btn-cart{position:relative;background:rgba(0,220,255,.08);border:1px solid rgba(0,220,255,.2);
+  color:var(--c);width:44px;height:44px;border-radius:8px;cursor:pointer;
+  transition:background .2s,border-color .2s;display:flex;align-items:center;justify-content:center;font-size:20px}
+.btn-cart:hover{background:rgba(0,220,255,.15);border-color:rgba(0,220,255,.4)}
+.cart-badge{position:absolute;top:-6px;right:-6px;background:var(--o);color:#fff;
+  border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;
+  transform:scale(0);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.cart-badge.visible{transform:scale(1)}
+ 
 .btn-dnav{display:flex;align-items:center;gap:8px;background:var(--dc);color:#fff;border:none;
   padding:9px 18px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;
   letter-spacing:1px;cursor:pointer;transition:background .2s,transform .2s,box-shadow .2s;text-transform:uppercase}
@@ -51,14 +56,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;
   background:rgba(88,101,242,.12);border:1px solid rgba(88,101,242,.25);border-radius:30px;padding:5px 14px 5px 5px}
 .user-av{width:32px;height:32px;border-radius:50%;border:2px solid var(--dc)}
 .u-name{font-size:14px;font-weight:700}.u-tag{font-size:11px;color:rgba(255,255,255,.4)}
-.btn-out{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:16px;
-  transition:color .2s;padding:0 0 0 4px}.btn-out:hover{color:#ff4444}
+.btn-out{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:16px;transition:color .2s;padding:0 0 0 4px}.btn-out:hover{color:#ff4444}
  
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:120px 2rem 5rem;position:relative;overflow:hidden}
- 
-/* Fortnite SVG deco - will-change:transform for GPU layer */
 .deco{position:absolute;pointer-events:none;user-select:none;will-change:transform}
 .deco.llama{top:7%;right:5%;width:150px;opacity:.13;animation:fY 5s ease-in-out infinite alternate}
 .deco.pk1{bottom:8%;left:3%;width:120px;opacity:.1;animation:fY 4.2s ease-in-out infinite alternate-reverse}
@@ -69,96 +71,55 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;
 .deco.sh{top:28%;right:11%;width:65px;opacity:.09;animation:fY 3.8s ease-in-out infinite alternate}
 @keyframes fY{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-20px) rotate(3deg)}}
 @keyframes spin{to{transform:rotate(360deg)}}
- 
-.hero-kicker{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:700;
-  letter-spacing:5px;text-transform:uppercase;color:var(--c);margin-bottom:1.5rem}
-.hero-kicker .ln{width:45px;height:1px;background:linear-gradient(90deg,transparent,var(--c))}
-.hero-kicker .ln.r{background:linear-gradient(90deg,var(--c),transparent)}
- 
-.hero-t{font-family:'Bebas Neue',cursive;font-size:clamp(68px,13vw,140px);
-  line-height:.88;letter-spacing:6px;margin-bottom:1.2rem}
+.hero-kicker{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--c);margin-bottom:1.5rem}
+.hero-kicker .ln{width:45px;height:1px;background:linear-gradient(90deg,transparent,var(--c))}.hero-kicker .ln.r{background:linear-gradient(90deg,var(--c),transparent)}
+.hero-t{font-family:'Bebas Neue',cursive;font-size:clamp(68px,13vw,140px);line-height:.88;letter-spacing:6px;margin-bottom:1.2rem}
 .hero-t .t1{display:block;color:#fff}
-.hero-t .t2{display:block;
-  background:linear-gradient(135deg,var(--c) 0%,var(--p) 50%,var(--o) 100%);
-  background-size:200% auto;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 35px rgba(0,220,255,.3));
-  animation:shim 5s linear infinite;will-change:background-position}
-@keyframes shim{to{background-position:200% center}}
- 
-/* glitch — uses opacity+transform, GPU-friendly */
-.glitch{position:relative;display:inline-block}
-.glitch::before,.glitch::after{content:attr(data-t);position:absolute;top:0;left:0;right:0;
-  font-family:'Bebas Neue',cursive;
-  background:linear-gradient(135deg,var(--c),var(--p),var(--o));
+.hero-t .t2{display:block;background:linear-gradient(135deg,var(--c) 0%,var(--p) 50%,var(--o) 100%);
   background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  opacity:0;will-change:opacity,transform}
+  filter:drop-shadow(0 0 35px rgba(0,220,255,.3));animation:shim 5s linear infinite;will-change:background-position}
+@keyframes shim{to{background-position:200% center}}
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;top:0;left:0;right:0;font-family:'Bebas Neue',cursive;
+  background:linear-gradient(135deg,var(--c),var(--p),var(--o));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;will-change:opacity,transform}
 .glitch::before{animation:g1 7s infinite;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}
 .glitch::after{animation:g2 7s infinite;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%)}
 @keyframes g1{0%,91%,100%{opacity:0;transform:translate(0)}93%{opacity:.6;transform:translate(-3px,2px)}95%{opacity:0}97%{opacity:.4;transform:translate(3px,-2px)}99%{opacity:0}}
 @keyframes g2{0%,91%,100%{opacity:0;transform:translate(0)}94%{opacity:.5;transform:translate(3px,-2px)}96%{opacity:0}98%{opacity:.35;transform:translate(-3px,2px)}100%{opacity:0}}
- 
-.hero-desc{font-size:17px;font-weight:500;color:rgba(255,255,255,.48);max-width:500px;
-  margin:0 auto 2.5rem;line-height:1.65;letter-spacing:.3px}
- 
-.hero-stats{display:flex;gap:0;margin-bottom:2.8rem;
-  border:1px solid rgba(255,255,255,.06);border-radius:8px;overflow:hidden;
-  background:rgba(255,255,255,.02);backdrop-filter:blur(8px)}
-.hst{padding:1.1rem 2.2rem;border-right:1px solid rgba(255,255,255,.06);text-align:center}
-.hst:last-child{border-right:none}
-.hst-n{font-family:'Bebas Neue',cursive;font-size:36px;
-  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.hero-desc{font-size:17px;font-weight:500;color:rgba(255,255,255,.48);max-width:500px;margin:0 auto 2.5rem;line-height:1.65}
+.hero-stats{display:flex;gap:0;margin-bottom:2.8rem;border:1px solid rgba(255,255,255,.06);border-radius:8px;overflow:hidden;background:rgba(255,255,255,.02);backdrop-filter:blur(8px)}
+.hst{padding:1.1rem 2.2rem;border-right:1px solid rgba(255,255,255,.06);text-align:center}.hst:last-child{border-right:none}
+.hst-n{font-family:'Bebas Neue',cursive;font-size:36px;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
 .hst-l{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-top:3px}
- 
 .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
- 
 .btn-glow{background:linear-gradient(135deg,var(--c),var(--p));color:#fff;border:none;
   padding:15px 42px;border-radius:4px;font-family:'Bebas Neue',cursive;font-size:21px;
   letter-spacing:3px;cursor:pointer;transition:transform .25s,box-shadow .25s;
   text-transform:uppercase;position:relative;overflow:hidden;will-change:transform}
-.btn-glow::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.12);
-  transform:translateX(-100%) skewX(-18deg);transition:transform .35s}
-.btn-glow:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(0,220,255,.3)}
-.btn-glow:hover::after{transform:translateX(150%) skewX(-18deg)}
- 
-.btn-ghost{background:transparent;color:rgba(255,255,255,.65);
-  border:1px solid rgba(255,255,255,.13);padding:15px 42px;border-radius:4px;
-  font-family:'Bebas Neue',cursive;font-size:21px;letter-spacing:3px;
-  cursor:pointer;transition:border-color .25s,color .25s,background .25s;text-transform:uppercase}
+.btn-glow::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.12);transform:translateX(-100%) skewX(-18deg);transition:transform .35s}
+.btn-glow:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(0,220,255,.3)}.btn-glow:hover::after{transform:translateX(150%) skewX(-18deg)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.13);padding:15px 42px;border-radius:4px;font-family:'Bebas Neue',cursive;font-size:21px;letter-spacing:3px;cursor:pointer;transition:border-color .25s,color .25s,background .25s;text-transform:uppercase}
 .btn-ghost:hover{border-color:rgba(0,220,255,.4);color:var(--c);background:rgba(0,220,255,.05)}
- 
-.scroll-ind{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:7px;opacity:.35;
-  animation:bob 2.2s ease-in-out infinite}
+.scroll-ind{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;opacity:.35;animation:bob 2.2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 .scroll-ind span{font-size:10px;letter-spacing:3px;text-transform:uppercase}
 .scroll-arr{width:18px;height:18px;border-right:1px solid #fff;border-bottom:1px solid #fff;transform:rotate(45deg)}
  
 /* SECTIONS */
 section{padding:6.5rem 2rem;position:relative;z-index:1}
-.s-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;
-  letter-spacing:4px;text-transform:uppercase;color:var(--c);margin-bottom:.8rem}
+.s-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--c);margin-bottom:.8rem}
 .s-tag::before{content:'';width:18px;height:1px;background:var(--c)}
-.s-title{font-family:'Bebas Neue',cursive;font-size:clamp(38px,7vw,68px);
-  letter-spacing:3px;line-height:1;margin-bottom:.6rem}
-.s-title em{font-style:normal;background:linear-gradient(135deg,var(--c),var(--p));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.s-title{font-family:'Bebas Neue',cursive;font-size:clamp(38px,7vw,68px);letter-spacing:3px;line-height:1;margin-bottom:.6rem}
+.s-title em{font-style:normal;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .s-sub{font-size:14px;font-weight:600;color:rgba(255,255,255,.32);letter-spacing:1px;margin-bottom:3.5rem}
 .center{text-align:center}
-.divider{width:90px;height:1px;margin:0 auto 4.5rem;
-  background:linear-gradient(90deg,transparent,var(--c),var(--p),transparent)}
+.divider{width:90px;height:1px;margin:0 auto 4.5rem;background:linear-gradient(90deg,transparent,var(--c),var(--p),transparent)}
  
 /* WHY */
-.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:1px;max-width:980px;margin:0 auto;
-  border:1px solid rgba(255,255,255,.05);border-radius:10px;overflow:hidden}
-.wi{padding:2.2rem 1.8rem;background:rgba(255,255,255,.02);
-  border-right:1px solid rgba(255,255,255,.05);transition:background .25s;
-  position:relative;overflow:hidden}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;max-width:980px;margin:0 auto;border:1px solid rgba(255,255,255,.05);border-radius:10px;overflow:hidden}
+.wi{padding:2.2rem 1.8rem;background:rgba(255,255,255,.02);border-right:1px solid rgba(255,255,255,.05);transition:background .25s;position:relative;overflow:hidden}
 .wi:last-child{border-right:none}
-.wi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--c),var(--p));
-  transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.wi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c),var(--p));transform:scaleX(0);transition:transform .3s;transform-origin:left}
 .wi:hover{background:rgba(0,220,255,.035)}.wi:hover::before{transform:scaleX(1)}
 .wi-ic{font-size:30px;margin-bottom:.9rem;display:block}
 .wi-t{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;margin-bottom:.4rem}
@@ -167,42 +128,27 @@ section{padding:6.5rem 2rem;position:relative;z-index:1}
 /* PRODUCTS */
 .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;max-width:1120px;margin:0 auto}
 @media(max-width:880px){.pgrid{grid-template-columns:1fr}}
- 
-.pc{background:rgba(10,15,30,.85);border:1px solid rgba(255,255,255,.07);
-  border-radius:10px;overflow:hidden;position:relative;
-  transition:transform .35s,border-color .35s,box-shadow .35s;
-  will-change:transform}
+.pc{background:rgba(10,15,30,.88);border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;
+  position:relative;transition:transform .35s,border-color .35s,box-shadow .35s;will-change:transform}
 .pc:hover{transform:translateY(-7px)}
 .pc.bronze{--tc:#e8923a;--tc2:#ffb86c}
 .pc.gold{--tc:#ffd700;--tc2:#fff176}
 .pc.leg{--tc:var(--c);--tc2:var(--p)}
-.pc:hover{border-color:color-mix(in srgb,var(--tc) 38%,transparent);
-  box-shadow:0 20px 55px rgba(0,0,0,.45),0 0 35px color-mix(in srgb,var(--tc) 10%,transparent)}
- 
+.pc:hover{border-color:color-mix(in srgb,var(--tc) 38%,transparent);box-shadow:0 20px 55px rgba(0,0,0,.45),0 0 35px color-mix(in srgb,var(--tc) 10%,transparent)}
 .pc-glow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;
   background:radial-gradient(ellipse 80% 40% at 50% -10%,color-mix(in srgb,var(--tc) 10%,transparent) 0%,transparent 60%)}
 .pc:hover .pc-glow{opacity:1}
- 
 .pc-bar{background:linear-gradient(135deg,color-mix(in srgb,var(--tc) 18%,transparent),color-mix(in srgb,var(--tc2) 8%,transparent));
   border-bottom:1px solid color-mix(in srgb,var(--tc) 22%,transparent);padding:8px;text-align:center;
   font-size:11px;font-weight:700;letter-spacing:3px;color:var(--tc);text-transform:uppercase}
- 
-.pc-coming{position:absolute;inset:0;z-index:20;background:rgba(6,9,18,.8);
-  backdrop-filter:blur(3px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-.pc-badge{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:5px;color:rgba(255,255,255,.3);
-  border:1px solid rgba(255,255,255,.08);padding:9px 26px;border-radius:4px;text-transform:uppercase}
-.pc-bsub{font-size:11px;font-weight:600;letter-spacing:2px;color:rgba(255,255,255,.18)}
- 
 .pc-tier{position:absolute;top:16px;left:16px;font-family:'Bebas Neue',cursive;font-size:10px;letter-spacing:3px;
   background:color-mix(in srgb,var(--tc) 14%,transparent);color:var(--tc);padding:3px 9px;border-radius:2px}
- 
 .pc-head{padding:2.5rem 1.4rem 1.4rem}
-.pc-icon{width:52px;height:52px;background:color-mix(in srgb,var(--tc) 11%,transparent);
-  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;
-  margin-bottom:1rem;border:1px solid color-mix(in srgb,var(--tc) 18%,transparent)}
+.pc-icon{width:52px;height:52px;background:color-mix(in srgb,var(--tc) 11%,transparent);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:1rem;
+  border:1px solid color-mix(in srgb,var(--tc) 18%,transparent)}
 .pc-name{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;margin-bottom:5px}
 .pc-desc{font-size:13px;font-weight:500;color:rgba(255,255,255,.4);line-height:1.55}
- 
 .pc-body{padding:0 1.4rem 1.4rem}
 .fps-m{margin-bottom:1.4rem}
 .fps-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
@@ -210,103 +156,168 @@ section{padding:6.5rem 2rem;position:relative;z-index:1}
 .fps-v{font-family:'Bebas Neue',cursive;font-size:15px;color:var(--tc);letter-spacing:1px}
 .fps-t{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
 .fps-f{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--tc),var(--tc2))}
- 
 .feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:1.4rem}
 .feats li{display:flex;align-items:flex-start;gap:9px;font-size:13px;font-weight:600;color:rgba(255,255,255,.68);line-height:1.4}
 .feats li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--tc);flex-shrink:0;margin-top:5px}
- 
 .pc-hr{height:1px;background:rgba(255,255,255,.05);margin:1.3rem 0}
 .pc-price{display:flex;align-items:baseline;gap:4px;margin-bottom:1.1rem}
 .pc-cur{font-size:17px;font-weight:700;color:rgba(255,255,255,.38);align-self:flex-start;margin-top:7px}
 .pc-amt{font-family:'Bebas Neue',cursive;font-size:44px;color:var(--tc);line-height:1}
 .pc-per{font-size:11px;font-weight:700;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:1px}
  
+/* BUTTONS IN CARD */
 .btn-buy{width:100%;border:none;border-radius:5px;padding:14px;font-family:'Bebas Neue',cursive;
-  font-size:19px;letter-spacing:3px;cursor:pointer;color:#fff;transition:transform .25s,box-shadow .25s,opacity .25s;
+  font-size:19px;letter-spacing:3px;cursor:pointer;color:#fff;transition:transform .25s,box-shadow .25s;
   text-transform:uppercase;background:linear-gradient(135deg,var(--tc),var(--tc2));
-  position:relative;overflow:hidden}
+  position:relative;overflow:hidden;margin-bottom:8px}
 .btn-buy.gold-b{color:#1a1200}
-.btn-buy::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.14);
-  transform:translateX(-100%) skewX(-15deg);transition:transform .35s}
+.btn-buy::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.14);transform:translateX(-100%) skewX(-15deg);transition:transform .35s}
 .btn-buy:hover::after{transform:translateX(150%) skewX(-15deg)}
 .btn-buy:hover{transform:scale(1.02);box-shadow:0 5px 20px color-mix(in srgb,var(--tc) 30%,transparent)}
-.btn-buy:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
-.btn-buy:disabled::after{display:none}
  
-/* MODAL */
-.mbg{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.8);backdrop-filter:blur(14px);
-  display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s}
+.btn-addcart{width:100%;border:1px solid color-mix(in srgb,var(--tc) 35%,transparent);
+  border-radius:5px;padding:11px;font-family:'Bebas Neue',cursive;
+  font-size:16px;letter-spacing:2px;cursor:pointer;color:var(--tc);
+  background:color-mix(in srgb,var(--tc) 8%,transparent);
+  transition:background .25s,border-color .25s,transform .2s;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-addcart:hover{background:color-mix(in srgb,var(--tc) 16%,transparent);border-color:color-mix(in srgb,var(--tc) 55%,transparent);transform:scale(1.01)}
+.btn-addcart.added{background:color-mix(in srgb,var(--tc) 20%,transparent);border-color:var(--tc)}
+ 
+/* ══════════════ CART DRAWER ══════════════ */
+.cart-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0);pointer-events:none;transition:background .3s}
+.cart-overlay.open{background:rgba(0,0,0,.6);pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:95vw;z-index:701;
+  background:linear-gradient(180deg,#0d1228,#080c1a);
+  border-left:1px solid rgba(0,220,255,.12);
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;overflow:hidden}
+.cart-overlay.open .cart-drawer{transform:translateX(0)}
+.cart-head{padding:1.4rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:space-between}
+.cart-title{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:3px;
+  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cart-x{background:rgba(255,255,255,.05);border:none;color:rgba(255,255,255,.5);
+  cursor:pointer;width:32px;height:32px;border-radius:50%;font-size:16px;
+  transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center}
+.cart-x:hover{background:rgba(255,255,255,.1);color:#fff}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.8rem}
+.cart-items::-webkit-scrollbar{width:4px}.cart-items::-webkit-scrollbar-track{background:transparent}
+.cart-items::-webkit-scrollbar-thumb{background:rgba(0,220,255,.2);border-radius:2px}
+.cart-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;opacity:.4}
+.cart-empty-ic{font-size:48px}
+.cart-empty-t{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px}
+.cart-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;padding:1rem;display:flex;align-items:center;gap:12px;
+  transition:border-color .2s}
+.cart-item:hover{border-color:rgba(0,220,255,.15)}
+.ci-icon{width:44px;height:44px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-family:'Bebas Neue',cursive;font-size:17px;letter-spacing:1px}
+.ci-price{font-size:12px;font-weight:700;color:rgba(255,255,255,.4);margin-top:2px}
+.ci-rm{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.15);color:rgba(255,100,100,.7);
+  cursor:pointer;padding:5px 10px;border-radius:5px;font-size:12px;font-weight:700;
+  transition:background .2s,color .2s;white-space:nowrap}
+.ci-rm:hover{background:rgba(255,80,80,.18);color:#ff6464}
+.cart-foot{padding:1.2rem 1.5rem;border-top:1px solid rgba(255,255,255,.06)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
+.cart-total-lbl{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.cart-total-val{font-family:'Bebas Neue',cursive;font-size:32px;
+  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.btn-checkout{width:100%;background:linear-gradient(135deg,var(--c),var(--p));color:#fff;border:none;
+  border-radius:6px;padding:15px;font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:3px;
+  cursor:pointer;transition:transform .25s,box-shadow .25s;text-transform:uppercase;
+  position:relative;overflow:hidden}
+.btn-checkout::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.13);transform:translateX(-100%) skewX(-15deg);transition:transform .35s}
+.btn-checkout:hover{transform:scale(1.02);box-shadow:0 6px 24px rgba(0,220,255,.3)}.btn-checkout:hover::after{transform:translateX(150%) skewX(-15deg)}
+.btn-checkout:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+ 
+/* ══════════════ CHECKOUT MODAL ══════════════ */
+.mbg{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.85);backdrop-filter:blur(16px);
+  display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s;padding:1rem}
 .mbg.open{opacity:1;pointer-events:all}
 .modal{background:linear-gradient(155deg,#0d1228,#0a0e1a);border:1px solid rgba(88,101,242,.22);
-  border-radius:16px;padding:2.8rem 2.4rem;max-width:410px;width:90%;text-align:center;
+  border-radius:16px;padding:2.8rem 2.4rem;max-width:460px;width:100%;text-align:center;
   transform:translateY(24px) scale(.97);transition:transform .33s cubic-bezier(.34,1.56,.64,1);position:relative;
-  box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 50px rgba(88,101,242,.12)}
+  box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 50px rgba(88,101,242,.12);max-height:90vh;overflow-y:auto}
 .mbg.open .modal{transform:translateY(0) scale(1)}
 .m-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.05);border:none;
   color:rgba(255,255,255,.38);cursor:pointer;width:30px;height:30px;border-radius:50%;
   font-size:15px;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center}
 .m-close:hover{background:rgba(255,255,255,.1);color:#fff}
-.m-logo{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:3px;
-  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
-.m-ic{font-size:48px;margin-bottom:.8rem;display:block}
-.m-title{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:2px;margin-bottom:.4rem}
-.m-sub{font-size:13px;font-weight:500;color:rgba(255,255,255,.38);line-height:1.6;margin-bottom:1.6rem}
-.m-perms{background:rgba(88,101,242,.07);border:1px solid rgba(88,101,242,.14);
-  border-radius:8px;padding:.9rem 1.1rem;margin-bottom:1.4rem;text-align:left}
-.m-perms p{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(255,255,255,.28);margin-bottom:7px}
-.perm{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
-  color:rgba(255,255,255,.6);padding:3px 0}
+.m-logo{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:3px;
+  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.3rem}
+.m-ic{font-size:46px;margin-bottom:.7rem;display:block}
+.m-title{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;margin-bottom:.4rem}
+.m-sub{font-size:13px;font-weight:500;color:rgba(255,255,255,.38);line-height:1.6;margin-bottom:1.5rem}
+.m-perms{background:rgba(88,101,242,.07);border:1px solid rgba(88,101,242,.14);border-radius:8px;padding:.9rem 1.1rem;margin-bottom:1.4rem;text-align:left}
+.m-perms p{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:7px}
+.perm{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);padding:3px 0}
 .pdot{width:5px;height:5px;border-radius:50%;background:var(--dc);flex-shrink:0}
-.btn-dc{width:100%;background:var(--dc);color:#fff;border:none;padding:15px;border-radius:8px;
-  font-family:'Bebas Neue',cursive;font-size:21px;letter-spacing:3px;cursor:pointer;
+.btn-dc{width:100%;background:var(--dc);color:#fff;border:none;padding:14px;border-radius:8px;
+  font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:3px;cursor:pointer;
   transition:background .25s,transform .25s,box-shadow .25s;
   display:flex;align-items:center;justify-content:center;gap:10px;text-transform:uppercase}
 .btn-dc:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 8px 28px rgba(88,101,242,.38)}
 .m-note{font-size:10px;color:rgba(255,255,255,.18);margin-top:.9rem;line-height:1.5}
  
+/* CHECKOUT MODAL (resumen) */
+.co-summary{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.4rem;text-align:left}
+.co-item{display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.co-item:last-child{border-bottom:none}
+.co-iname{font-size:14px;font-weight:700;color:rgba(255,255,255,.8)}
+.co-iprice{font-family:'Bebas Neue',cursive;font-size:16px;color:var(--c)}
+.co-total{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;padding-top:.8rem;border-top:1px solid rgba(255,255,255,.08)}
+.co-total-l{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.co-total-v{font-family:'Bebas Neue',cursive;font-size:26px;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ticket-steps{background:rgba(88,101,242,.06);border:1px solid rgba(88,101,242,.13);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.4rem;text-align:left}
+.ticket-steps p{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px}
+.ts-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6);padding:4px 0}
+.ts-num{width:20px;height:20px;border-radius:50%;background:var(--dc);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.btn-ticket{width:100%;background:var(--dc);color:#fff;border:none;border-radius:8px;padding:14px;
+  font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:3px;cursor:pointer;
+  transition:background .25s,transform .25s,box-shadow .25s;margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:10px;text-transform:uppercase}
+.btn-ticket:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 8px 28px rgba(88,101,242,.4)}
+.btn-ticket-alt{width:100%;background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.25);color:#aab2ff;
+  border-radius:8px;padding:11px;font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:2px;
+  cursor:pointer;transition:background .2s;text-transform:uppercase}
+.btn-ticket-alt:hover{background:rgba(88,101,242,.18)}
+ 
 /* TOAST */
 .toast{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%) translateY(70px);
   background:rgba(6,9,18,.96);border:1px solid rgba(0,220,255,.22);border-radius:6px;
   padding:12px 26px;font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;
-  color:var(--c);z-index:900;transition:transform .38s cubic-bezier(.34,1.56,.64,1);
-  text-transform:uppercase;backdrop-filter:blur(10px);white-space:nowrap}
+  color:var(--c);z-index:999;transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+  text-transform:uppercase;backdrop-filter:blur(10px);white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
  
 /* FOOTER */
 footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align:center;position:relative;z-index:1}
-.f-logo{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;
-  background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  display:block;margin-bottom:.9rem}
+.f-logo{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:.9rem}
 .f-links{display:flex;gap:2rem;justify-content:center;margin-bottom:1.2rem;flex-wrap:wrap}
-.f-links a{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s}
+.f-links a{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s}
 .f-links a:hover{color:var(--c)}
-.f-copy{font-size:11px;color:rgba(255,255,255,.1);letter-spacing:.3px}
- 
-/* REVEAL */
+.f-copy{font-size:11px;color:rgba(255,255,255,.1)}
 .rev{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
 .rev.up{opacity:1;transform:none}
- 
 @media(max-width:700px){.nav-links{display:none}nav{padding:0 1rem}
-  .hero-stats{flex-direction:column}.hst{border-right:none;border-bottom:1px solid rgba(255,255,255,.05)}
-  .modal{padding:2rem 1.5rem}}
+  .hero-stats{flex-direction:column}.hst{border-right:none;border-bottom:1px solid rgba(255,255,255,.05)}}
 </style>
 </head>
 <body>
- 
 <div class="bg-base"></div>
 <div class="bg-grid"></div>
 <canvas id="pc"></canvas>
  
-<!-- MODAL DISCORD -->
-<div class="mbg" id="mbg">
+<!-- ══ DISCORD LOGIN MODAL ══ -->
+<div class="mbg" id="mbg-login">
   <div class="modal">
-    <button class="m-close" onclick="closeModal()">✕</button>
+    <button class="m-close" onclick="closeModal('login')">✕</button>
     <div class="m-logo">⚡ FortBoost</div>
-    <span class="m-ic">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-    </span>
+    <span class="m-ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg></span>
     <div class="m-title">Iniciar Sesión</div>
     <div class="m-sub">Conecta tu Discord para acceder a tus compras y gestionar tus optimizaciones.</div>
     <div class="m-perms">
@@ -319,7 +330,53 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
       Continuar con Discord
     </button>
-    <p class="m-note">Al continuar aceptas nuestros Términos. Nunca compartiremos tu información.</p>
+    <p class="m-note">Al continuar aceptas nuestros Términos. Nunca compartiremos tu info con terceros.</p>
+  </div>
+</div>
+ 
+<!-- ══ CHECKOUT MODAL ══ -->
+<div class="mbg" id="mbg-checkout">
+  <div class="modal">
+    <button class="m-close" onclick="closeModal('checkout')">✕</button>
+    <div class="m-logo">⚡ FortBoost</div>
+    <span class="m-ic">🛒</span>
+    <div class="m-title">Confirmar Pedido</div>
+    <div class="m-sub">Revisa tu pedido y abre un ticket en nuestro Discord para completar la compra.</div>
+    <div class="co-summary" id="co-summary"></div>
+    <div class="ticket-steps">
+      <p>¿Cómo funciona?</p>
+      <div class="ts-item"><span class="ts-num">1</span>Haz clic en "Abrir Ticket" para ir a nuestro Discord</div>
+      <div class="ts-item"><span class="ts-num">2</span>Se creará un canal privado con tu pedido adjunto</div>
+      <div class="ts-item"><span class="ts-num">3</span>Un agente te atenderá en menos de 10 minutos</div>
+      <div class="ts-item"><span class="ts-num">4</span>Completa el pago y recibe tu optimización al instante</div>
+    </div>
+    <button class="btn-ticket" onclick="openTicket()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      🎫 Abrir Ticket en Discord
+    </button>
+    <button class="btn-ticket-alt" onclick="closeModal('checkout')">Seguir comprando</button>
+  </div>
+</div>
+ 
+<!-- ══ CART DRAWER ══ -->
+<div class="cart-overlay" id="cartOverlay" onclick="handleOverlayClick(event)">
+  <div class="cart-drawer">
+    <div class="cart-head">
+      <div class="cart-title">🛒 Tu Carrito</div>
+      <button class="cart-x" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty"><span class="cart-empty-ic">🎮</span><span class="cart-empty-t">Tu carrito está vacío</span></div>
+    </div>
+    <div class="cart-foot">
+      <div class="cart-total-row">
+        <span class="cart-total-lbl">Total</span>
+        <span class="cart-total-val" id="cartTotal">$0.00</span>
+      </div>
+      <button class="btn-checkout" id="btnCheckout" onclick="openCheckout()" disabled>
+        🎫 Proceder al Checkout
+      </button>
+    </div>
   </div>
 </div>
  
@@ -332,11 +389,17 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <a href="#porque">¿Por qué?</a>
     <a href="#">Soporte</a>
   </div>
-  <div id="navAuth">
-    <button class="btn-dnav" onclick="openModal()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-      Login con Discord
+  <div class="nav-right">
+    <button class="btn-cart" onclick="openCart()" title="Ver carrito">
+      🛒
+      <span class="cart-badge" id="cartBadge">0</span>
     </button>
+    <div id="navAuth">
+      <button class="btn-dnav" onclick="openModal('login')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Login con Discord
+      </button>
+    </div>
   </div>
 </nav>
  
@@ -344,7 +407,7 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
  
 <!-- HERO -->
 <section class="hero">
-  <!-- LLAMA SVG -->
+  <!-- SVG DECOS -->
   <svg class="deco llama" viewBox="0 0 200 220" fill="none">
     <rect x="50" y="80" width="100" height="80" rx="12" fill="#7c3aed" stroke="#00dcff" stroke-width="2"/>
     <rect x="110" y="40" width="60" height="55" rx="8" fill="#9d5cff" stroke="#00dcff" stroke-width="2"/>
@@ -361,8 +424,6 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <text x="58" y="115" font-size="18" fill="#ffd700" opacity=".9">★</text>
     <text x="118" y="105" font-size="13" fill="#00dcff" opacity=".8">★</text>
   </svg>
- 
-  <!-- PICKAXE L -->
   <svg class="deco pk1" viewBox="0 0 130 280" fill="none">
     <rect x="58" y="80" width="14" height="180" rx="7" fill="#8b5cf6" stroke="#a78bfa" stroke-width="1.5"/>
     <path d="M30 60 Q65 20 100 60 Q80 80 65 75 Q50 80 30 60Z" fill="#00dcff" stroke="#fff" stroke-width="1.5" opacity=".9"/>
@@ -372,8 +433,6 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <rect x="56" y="162" width="18" height="6" rx="3" fill="#ff6b35" opacity=".6"/>
     <rect x="56" y="184" width="18" height="6" rx="3" fill="#ff6b35" opacity=".6"/>
   </svg>
- 
-  <!-- PICKAXE R -->
   <svg class="deco pk2" viewBox="0 0 120 260" fill="none">
     <rect x="54" y="70" width="12" height="170" rx="6" fill="#ffd700" stroke="#ffb86c" stroke-width="1.5"/>
     <path d="M20 55 Q60 10 100 55 Q82 72 60 67 Q38 72 20 55Z" fill="#ffd700" stroke="#fff" stroke-width="1.5"/>
@@ -382,8 +441,6 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <rect x="52" y="130" width="16" height="5" rx="2.5" fill="#7c3aed" opacity=".7"/>
     <rect x="52" y="150" width="16" height="5" rx="2.5" fill="#7c3aed" opacity=".7"/>
   </svg>
- 
-  <!-- BATTLE BUS -->
   <svg class="deco bus" viewBox="0 0 280 130" fill="none">
     <rect x="10" y="35" width="240" height="75" rx="10" fill="#1a3a6b" stroke="#00dcff" stroke-width="2"/>
     <rect x="20" y="15" width="200" height="28" rx="8" fill="#0f2952" stroke="#00dcff" stroke-width="1.5"/>
@@ -403,25 +460,15 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <ellipse cx="130" cy="0" rx="14" ry="7" fill="#ffd700" opacity=".55"/>
     <text x="142" y="88" font-family="sans-serif" font-size="20" font-weight="bold" fill="#00dcff" opacity=".45">100</text>
   </svg>
- 
-  <!-- STARS -->
-  <svg class="deco sl" viewBox="0 0 60 60" fill="none">
-    <path d="M30 2 L36 22 L56 22 L40 34 L46 54 L30 42 L14 54 L20 34 L4 22 L24 22 Z" fill="#ffd700" stroke="#ff6b35" stroke-width="2"/>
-  </svg>
-  <svg class="deco sr" viewBox="0 0 50 50" fill="none">
-    <path d="M25 2 L30 18 L46 18 L33 28 L38 44 L25 34 L12 44 L17 28 L4 18 L20 18 Z" fill="#00dcff" stroke="#7c3aed" stroke-width="1.5" opacity=".8"/>
-  </svg>
- 
-  <!-- SHIELD -->
+  <svg class="deco sl" viewBox="0 0 60 60" fill="none"><path d="M30 2 L36 22 L56 22 L40 34 L46 54 L30 42 L14 54 L20 34 L4 22 L24 22 Z" fill="#ffd700" stroke="#ff6b35" stroke-width="2"/></svg>
+  <svg class="deco sr" viewBox="0 0 50 50" fill="none"><path d="M25 2 L30 18 L46 18 L33 28 L38 44 L25 34 L12 44 L17 28 L4 18 L20 18 Z" fill="#00dcff" stroke="#7c3aed" stroke-width="1.5" opacity=".8"/></svg>
   <svg class="deco sh" viewBox="0 0 70 85" fill="none">
     <path d="M35 5 L65 18 L65 45 Q65 68 35 80 Q5 68 5 45 L5 18 Z" fill="#00dcff" stroke="#fff" stroke-width="2" opacity=".35"/>
     <path d="M35 15 L55 25 L55 44 Q55 60 35 70 Q15 60 15 44 L15 25 Z" fill="#0a2a4a" stroke="#00dcff" stroke-width="1.5"/>
     <text x="22" y="52" font-family="sans-serif" font-size="24" font-weight="900" fill="#00dcff">+</text>
   </svg>
  
-  <div class="hero-kicker">
-    <span class="ln"></span>Victoria Royale Garantizada<span class="ln r"></span>
-  </div>
+  <div class="hero-kicker"><span class="ln"></span>Victoria Royale Garantizada<span class="ln r"></span></div>
   <h1 class="hero-t">
     <span class="t1">DOMINA</span>
     <span class="t2"><span class="glitch" data-t="FORTNITE">FORTNITE</span></span>
@@ -434,10 +481,8 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <div class="hst"><div class="hst-n">4ms</div><div class="hst-l">Ping Promedio</div></div>
   </div>
   <div class="hero-btns">
-    <button class="btn-glow" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">
-      ⚡ Ver Optimizaciones
-    </button>
-    <button class="btn-ghost" onclick="openModal()">🎮 Entrar con Discord</button>
+    <button class="btn-glow" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">⚡ Ver Optimizaciones</button>
+    <button class="btn-ghost" onclick="openModal('login')">🎮 Entrar con Discord</button>
   </div>
   <div class="scroll-ind"><span>Scroll</span><div class="scroll-arr"></div></div>
 </section>
@@ -468,8 +513,9 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
   </div>
   <div class="pgrid">
  
+    <!-- STARTER -->
     <div class="pc bronze rev">
-      <div class="pc-bar">⭐ Disponible Ahora</div>
+      <div class="pc-bar">⭐ Más Popular</div>
       <div class="pc-glow"></div>
       <div class="pc-tier">Básico</div>
       <div class="pc-head">
@@ -491,13 +537,14 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
         </ul>
         <div class="pc-hr"></div>
         <div class="pc-price"><span class="pc-cur">$</span><span class="pc-amt">4.99</span><span class="pc-per">/ único pago</span></div>
-        <button class="btn-buy" onclick="handleBuy('FPS Starter','4.99')">⚡ Comprar Ahora</button>
+        <button class="btn-buy" onclick="buyNow('FPS Starter','4.99','🚀')">⚡ Comprar Ahora</button>
+        <button class="btn-addcart" id="cart-starter" onclick="addToCart('FPS Starter','4.99','🚀','starter')">🛒 Añadir al Carrito</button>
       </div>
     </div>
  
+    <!-- PRO -->
     <div class="pc gold rev" style="transition-delay:.12s">
-      <div class="pc-coming"><div class="pc-badge">🔒 Próximamente</div><div class="pc-bsub">Disponible muy pronto</div></div>
-      <div class="pc-bar">🏆 Pro — En desarrollo</div>
+      <div class="pc-bar">🏆 Recomendado</div>
       <div class="pc-glow"></div>
       <div class="pc-tier" style="top:52px">Pro</div>
       <div class="pc-head">
@@ -519,13 +566,14 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
         </ul>
         <div class="pc-hr"></div>
         <div class="pc-price"><span class="pc-cur">$</span><span class="pc-amt">12.99</span><span class="pc-per">/ único pago</span></div>
-        <button class="btn-buy gold-b" disabled>🔒 Próximamente</button>
+        <button class="btn-buy gold-b" onclick="buyNow('FPS Pro','12.99','🏆')">⚡ Comprar Ahora</button>
+        <button class="btn-addcart" id="cart-pro" onclick="addToCart('FPS Pro','12.99','🏆','pro')">🛒 Añadir al Carrito</button>
       </div>
     </div>
  
+    <!-- LEGENDARY -->
     <div class="pc leg rev" style="transition-delay:.24s">
-      <div class="pc-coming"><div class="pc-badge">🔒 Próximamente</div><div class="pc-bsub">La suite definitiva</div></div>
-      <div class="pc-bar">👑 Legendary — En desarrollo</div>
+      <div class="pc-bar">👑 Suite Completa</div>
       <div class="pc-glow"></div>
       <div class="pc-tier" style="top:52px">Legendary</div>
       <div class="pc-head">
@@ -547,7 +595,8 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
         </ul>
         <div class="pc-hr"></div>
         <div class="pc-price"><span class="pc-cur">$</span><span class="pc-amt">29.99</span><span class="pc-per">/ único pago</span></div>
-        <button class="btn-buy" disabled>🔒 Próximamente</button>
+        <button class="btn-buy" onclick="buyNow('FPS Legendary','29.99','👑')">⚡ Comprar Ahora</button>
+        <button class="btn-addcart" id="cart-leg" onclick="addToCart('FPS Legendary','29.99','👑','leg')">🛒 Añadir al Carrito</button>
       </div>
     </div>
  
@@ -567,63 +616,34 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
 <div class="toast" id="toast"></div>
  
 <script>
-// ─── PARTICLES (throttled, GPU-composited) ────────────────────────────
+// ─── PARTICLES ────────────────────────────────────────────────────────
 const canvas=document.getElementById('pc'),ctx=canvas.getContext('2d');
 let W=0,H=0,pts=[];
 function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
 resize();window.addEventListener('resize',resize);
- 
-function mkPt(){return{
-  x:Math.random()*W,y:Math.random()*H,
-  vx:(Math.random()-.5)*.25,vy:-(Math.random()*.4+.08),
-  a:Math.random()*.4+.08,s:Math.random()*1.4+.4,
-  c:Math.random()>.5?'0,220,255':'124,58,237',
-  life:0,max:Math.random()*280+120
-}}
+function mkPt(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:-(Math.random()*.4+.08),a:Math.random()*.4+.08,s:Math.random()*1.4+.4,c:Math.random()>.5?'0,220,255':'124,58,237',life:0,max:Math.random()*280+120}}
 for(let i=0;i<90;i++)pts.push(mkPt());
- 
 let last=0;
-function draw(ts){
-  if(ts-last<16){requestAnimationFrame(draw);return}last=ts;
-  ctx.clearRect(0,0,W,H);
-  pts.forEach((p,i)=>{
-    p.x+=p.vx;p.y+=p.vy;p.life++;
-    if(p.life>p.max||p.y<0)pts[i]=mkPt();
-    ctx.globalAlpha=p.a*(1-p.life/p.max);
-    ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${p.c},1)`;ctx.fill();
-  });
-  requestAnimationFrame(draw);
-}
+function draw(ts){if(ts-last<16){requestAnimationFrame(draw);return}last=ts;ctx.clearRect(0,0,W,H);pts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;p.life++;if(p.life>p.max||p.y<0)pts[i]=mkPt();ctx.globalAlpha=p.a*(1-p.life/p.max);ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle=`rgba(${p.c},1)`;ctx.fill()});requestAnimationFrame(draw)}
 requestAnimationFrame(draw);
  
-// ─── SCROLL REVEAL ────────────────────────────────────────────────────
-const obs=new IntersectionObserver(es=>{
-  es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('up'),i*70)})
-},{threshold:.08});
+// ─── REVEAL ───────────────────────────────────────────────────────────
+const obs=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('up'),i*70)})},{threshold:.08});
 document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
  
-// ─── MODAL ────────────────────────────────────────────────────────────
-function openModal(){document.getElementById('mbg').classList.add('open')}
-function closeModal(){document.getElementById('mbg').classList.remove('open')}
-document.getElementById('mbg').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()})
+// ─── MODALS ───────────────────────────────────────────────────────────
+function openModal(id){document.getElementById('mbg-'+id).classList.add('open')}
+function closeModal(id){document.getElementById('mbg-'+id).classList.remove('open')}
+document.getElementById('mbg-login').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal('login')});
+document.getElementById('mbg-checkout').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal('checkout')});
  
 // ─── DISCORD OAUTH ────────────────────────────────────────────────────
-// ⚠️  REEMPLAZA ESTE VALOR CON TU CLIENT ID DE DISCORD DEVELOPER PORTAL
-const CLIENT_ID = '1363671717725339808';
-const REDIRECT  = encodeURIComponent(location.href.split('?')[0].split('#')[0]);
-const SCOPE     = 'identify';
+const CLIENT_ID='1363671717725339808';
+const REDIRECT=encodeURIComponent(location.href.split('?')[0].split('#')[0]);
  
 function loginDiscord(){
-  if(CLIENT_ID==='TU_CLIENT_ID_AQUI'){
-    closeModal();
-    showToast('⚙️ Pon tu Client ID en el código');
-    return;
-  }
-  location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT}&response_type=token&scope=${SCOPE}`;
+  location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT}&response_type=token&scope=identify`;
 }
- 
-// Handle token from URL hash after redirect
 (function handleCallback(){
   if(!location.hash.includes('access_token'))return;
   const p=new URLSearchParams(location.hash.slice(1));
@@ -633,58 +653,123 @@ function loginDiscord(){
   fetch('https://discord.com/api/users/@me',{headers:{Authorization:`Bearer ${token}`}})
     .then(r=>r.json())
     .then(u=>{
-      const av=u.avatar
-        ?`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=64`
-        :`https://cdn.discordapp.com/embed/avatars/${(parseInt(u.discriminator||0))%5}.png`;
+      const av=u.avatar?`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=64`:`https://cdn.discordapp.com/embed/avatars/${(parseInt(u.discriminator||0))%5}.png`;
       saveUser(u.username,u.discriminator||'0',av);
       renderUser(u.username,u.discriminator||'0',av);
       showToast(`¡Bienvenido, ${u.username}!`);
-    })
-    .catch(()=>showToast('Error al conectar con Discord'));
+    }).catch(()=>showToast('Error al conectar con Discord'));
 })();
- 
-// Load saved session
-(function loadSession(){
-  try{
-    const s=localStorage.getItem('fb_u');
-    if(!s)return;
-    const u=JSON.parse(s);
-    renderUser(u.n,u.d,u.a);
-  }catch(e){}
-})();
- 
+(function loadSession(){try{const s=localStorage.getItem('fb_u');if(!s)return;const u=JSON.parse(s);renderUser(u.n,u.d,u.a)}catch(e){}})();
 function saveUser(n,d,a){try{localStorage.setItem('fb_u',JSON.stringify({n,d,a}))}catch(e){}}
- 
 function renderUser(n,d,a){
-  document.getElementById('navAuth').innerHTML=`
-  <div class="user-pill">
-    <img class="user-av" src="${a}" alt="${n}" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-    <div><div class="u-name">${n}</div><div class="u-tag">#${d}</div></div>
-    <button class="btn-out" onclick="logout()" title="Salir">✕</button>
-  </div>`;
+  document.getElementById('navAuth').innerHTML=`<div class="user-pill"><img class="user-av" src="${a}" alt="${n}" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><div><div class="u-name">${n}</div><div class="u-tag">#${d}</div></div><button class="btn-out" onclick="logout()" title="Salir">✕</button></div>`;
+}
+function logout(){try{localStorage.removeItem('fb_u')}catch(e){}document.getElementById('navAuth').innerHTML=`<button class="btn-dnav" onclick="openModal('login')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>Login con Discord</button>`;showToast('Sesión cerrada');}
+ 
+// ─── CART ─────────────────────────────────────────────────────────────
+let cart=[];
+ 
+function openCart(){document.getElementById('cartOverlay').classList.add('open')}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('open')}
+function handleOverlayClick(e){if(e.target===document.getElementById('cartOverlay'))closeCart()}
+ 
+function addToCart(name,price,icon,id){
+  if(!localStorage.getItem('fb_u')){openModal('login');return}
+  const existing=cart.find(i=>i.id===id);
+  if(existing){showToast(`⚠️ ${name} ya está en el carrito`);return}
+  cart.push({id,name,price:parseFloat(price),icon});
+  renderCart();
+  const btn=document.getElementById('cart-'+id);
+  if(btn){btn.textContent='✓ En el Carrito';btn.classList.add('added')}
+  showToast(`✅ ${name} añadido al carrito`);
+  openCart();
 }
  
-function logout(){
-  try{localStorage.removeItem('fb_u')}catch(e){}
-  document.getElementById('navAuth').innerHTML=`
-  <button class="btn-dnav" onclick="openModal()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-    Login con Discord
-  </button>`;
-  showToast('Sesión cerrada');
+function removeFromCart(id){
+  cart=cart.filter(i=>i.id!==id);
+  renderCart();
+  const btn=document.getElementById('cart-'+id);
+  if(btn){btn.textContent='🛒 Añadir al Carrito';btn.classList.remove('added')}
+  showToast('Producto eliminado del carrito');
 }
  
-// ─── BUY ──────────────────────────────────────────────────────────────
-function handleBuy(name,price){
-  if(!localStorage.getItem('fb_u')){openModal();return}
-  showToast(`⚡ ${name} — $${price} agregado`);
+function renderCart(){
+  const el=document.getElementById('cartItems');
+  const badge=document.getElementById('cartBadge');
+  const total=cart.reduce((s,i)=>s+i.price,0);
+  document.getElementById('cartTotal').textContent=`$${total.toFixed(2)}`;
+  const btnCo=document.getElementById('btnCheckout');
+  btnCo.disabled=cart.length===0;
+  badge.textContent=cart.length;
+  badge.classList.toggle('visible',cart.length>0);
+  if(cart.length===0){
+    el.innerHTML=`<div class="cart-empty"><span class="cart-empty-ic">🎮</span><span class="cart-empty-t">Tu carrito está vacío</span></div>`;
+    return;
+  }
+  el.innerHTML=cart.map(i=>`
+    <div class="cart-item">
+      <div class="ci-icon" style="background:rgba(0,220,255,.08);border:1px solid rgba(0,220,255,.15)">${i.icon}</div>
+      <div class="ci-info">
+        <div class="ci-name">${i.name}</div>
+        <div class="ci-price">$${i.price.toFixed(2)} — único pago</div>
+      </div>
+      <button class="ci-rm" onclick="removeFromCart('${i.id}')">✕ Quitar</button>
+    </div>`).join('');
+}
+ 
+function buyNow(name,price,icon){
+  if(!localStorage.getItem('fb_u')){openModal('login');return}
+  cart=[];
+  const id=name.toLowerCase().replace(/\s/g,'-');
+  cart.push({id,name,price:parseFloat(price),icon});
+  renderCart();
+  closeCart();
+  openCheckout();
+}
+ 
+// ─── CHECKOUT ─────────────────────────────────────────────────────────
+function openCheckout(){
+  if(!localStorage.getItem('fb_u')){openModal('login');return}
+  if(cart.length===0){showToast('⚠️ Tu carrito está vacío');return}
+  closeCart();
+  const total=cart.reduce((s,i)=>s+i.price,0);
+  const sum=document.getElementById('co-summary');
+  sum.innerHTML=`
+    ${cart.map(i=>`<div class="co-item"><span class="co-iname">${i.icon} ${i.name}</span><span class="co-iprice">$${i.price.toFixed(2)}</span></div>`).join('')}
+    <div class="co-total"><span class="co-total-l">Total</span><span class="co-total-v">$${total.toFixed(2)}</span></div>`;
+  openModal('checkout');
+}
+ 
+// ─── TICKET ───────────────────────────────────────────────────────────
+// ⚠️ Cambia esta URL por la de tu servidor de Discord (canal de tickets o bot)
+const DISCORD_TICKET_URL = 'https://discord.gg/hpY9RpGfy6';
+ 
+function openTicket(){
+  const u=JSON.parse(localStorage.getItem('fb_u')||'{}');
+  const items=cart.map(i=>`${i.icon} ${i.name} — $${i.price.toFixed(2)}`).join(', ');
+  const total=cart.reduce((s,i)=>s+i.price,0).toFixed(2);
+  const msg=encodeURIComponent(`🎮 NUEVO PEDIDO FORTBOOST\n👤 Usuario: ${u.n||'?'}#${u.d||'?'}\n📦 Productos: ${items}\n💰 Total: $${total}`);
+  // Abre el servidor de Discord (en Discord real usarías un bot de tickets)
+  window.open(DISCORD_TICKET_URL,'_blank');
+  closeModal('checkout');
+  showToast('🎫 Redirigiendo a Discord...');
+  // Limpiar carrito tras abrir ticket
+  setTimeout(()=>{
+    cart=[];
+    renderCart();
+    ['starter','pro','leg'].forEach(id=>{
+      const btn=document.getElementById('cart-'+id);
+      if(btn){btn.textContent='🛒 Añadir al Carrito';btn.classList.remove('added')}
+    });
+    showToast('✅ Ticket creado — te esperamos en Discord');
+  },2000);
 }
  
 // ─── TOAST ────────────────────────────────────────────────────────────
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3000);
 }
 </script>
 </body>
