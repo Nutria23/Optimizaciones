@@ -36,6 +36,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;
   background:var(--c);transform:scaleX(0);transition:transform .2s;transform-origin:left}
 .nav-links a:hover{color:#fff}.nav-links a:hover::after{transform:scaleX(1)}
 .nav-right{display:flex;align-items:center;gap:12px}
+.sync-indicator{display:flex;align-items:center;gap:5px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;color:rgba(255,255,255,.45);transition:opacity .3s}
+.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.sync-dot.ok{background:#22c55e;box-shadow:0 0 6px #22c55e}
+.sync-dot.syncing{background:#facc15;box-shadow:0 0 6px #facc15;animation:syncPulse .8s infinite alternate}
+.sync-dot.error{background:#ef4444;box-shadow:0 0 6px #ef4444}
+.sync-dot.idle{background:rgba(255,255,255,.2);box-shadow:none}
+@keyframes syncPulse{from{opacity:.5}to{opacity:1}}
 
 /* CART BUTTON NAV */
 .btn-cart{position:relative;background:rgba(0,220,255,.08);border:1px solid rgba(0,220,255,.2);
@@ -594,6 +601,10 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     <a href="#">Soporte</a>
   </div>
   <div class="nav-right">
+    <div class="sync-indicator" id="syncIndicator">
+      <span class="sync-dot idle" id="syncDot"></span>
+      <span id="syncLabel"></span>
+    </div>
     <button class="btn-cart" onclick="openCart()" title="Ver carrito">
       🛒
       <span class="cart-badge" id="cartBadge">0</span>
@@ -829,6 +840,71 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// ── CONFIGURACIÓN FIREBASE ── reemplaza con tus datos de Firebase Console ──
+const firebaseConfig = {
+  apiKey:            "AIzaSyApiKaHi2rfzFqZVZxOoq8bEcVqIdECPi0",
+  authDomain:        "fortboost-97d1c.firebaseapp.com",
+  projectId:         "fortboost-97d1c",
+  storageBucket:     "fortboost-97d1c.firebasestorage.app",
+  messagingSenderId: "719255180990",
+  appId:             "1:719255180990:web:bec3649eabd12191e4b0ef"
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// Exponer funciones al scope global para usarlas desde el JS no-module
+window._fbSaveSession = async function(data) {
+  const uid = data.uid || data.username || 'anon';
+  setSyncStatus('syncing');
+  try {
+    await setDoc(doc(db, 'sessions', uid), {
+      ...data,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    setSyncStatus('ok');
+  } catch(e) {
+    console.warn('Firebase save error:', e);
+    setSyncStatus('error');
+  }
+};
+
+window._fbLoadSession = async function(uid) {
+  try {
+    const snap = await getDoc(doc(db, 'sessions', uid));
+    return snap.exists() ? snap.data() : null;
+  } catch(e) {
+    console.warn('Firebase load error:', e);
+    return null;
+  }
+};
+
+window._fbWatchSession = function(uid, callback) {
+  return onSnapshot(doc(db, 'sessions', uid), (snap) => {
+    if (snap.exists()) callback(snap.data());
+  }, (err) => console.warn('onSnapshot error:', err));
+};
+
+// Indicador de sincronización
+function setSyncStatus(status) {
+  const dot   = document.getElementById('syncDot');
+  const label = document.getElementById('syncLabel');
+  if (!dot) return;
+  dot.className = 'sync-dot ' + status;
+  if (status === 'syncing') label.textContent = 'Guardando...';
+  else if (status === 'ok')  label.textContent = 'Guardado';
+  else if (status === 'error') label.textContent = 'Sin conexión';
+}
+window._setSyncStatus = setSyncStatus;
+</script>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ─── PARTICLES ────────────────────────────────────────────────────────
 const canvas=document.getElementById('pc'),ctx=canvas.getContext('2d');
@@ -874,9 +950,34 @@ function loginDiscord(){
     }).catch(()=>showToast('Error al conectar con Discord'));
 })();
 (function loadSession(){try{const s=localStorage.getItem('fb_u');if(!s)return;const u=JSON.parse(s);renderUser(u.n,u.d,u.a)}catch(e){}})();
-function saveUser(n,d,a){try{localStorage.setItem('fb_u',JSON.stringify({n,d,a}))}catch(e){}}
+function saveUser(n,d,a){
+  try{localStorage.setItem('fb_u',JSON.stringify({n,d,a}))}catch(e){}
+  // Guardar en Firebase
+  if(window._fbSaveSession){
+    window._fbSaveSession({uid:`discord_${n}`,username:n,discriminator:d,avatar:a,cart,lastSeen:new Date().toISOString()});
+  }
+}
 function renderUser(n,d,a){
   document.getElementById('navAuth').innerHTML=`<div class="user-pill"><img class="user-av" src="${a}" alt="${n}" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><div><div class="u-name">${n}</div><div class="u-tag">#${d}</div></div><button class="btn-out" onclick="logout()" title="Salir">✕</button></div>`;
+  // Cargar carrito guardado en Firebase
+  if(window._fbLoadSession){
+    window._fbLoadSession(`discord_${n}`).then(data=>{
+      if(data&&data.cart&&data.cart.length>0){
+        cart=data.cart;
+        renderCart();
+        cart.forEach(i=>{
+          const btn=document.getElementById('cart-'+i.id);
+          if(btn){btn.textContent='✓ En el Carrito';btn.classList.add('added');}
+        });
+      }
+      // Escuchar cambios en tiempo real
+      if(window._fbWatchSession){
+        window._fbWatchSession(`discord_${n}`,data=>{
+          if(data&&data.cart){cart=data.cart;renderCart();}
+        });
+      }
+    });
+  }
 }
 function logout(){try{localStorage.removeItem('fb_u')}catch(e){}document.getElementById('navAuth').innerHTML=`<button class="btn-dnav" onclick="openModal('login')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>Login con Discord</button>`;showToast('Sesión cerrada');}
 
@@ -897,6 +998,7 @@ function addToCart(name,price,icon,id){
   if(btn){btn.textContent='✓ En el Carrito';btn.classList.add('added')}
   showToast(`✅ ${name} añadido al carrito`);
   openCart();
+  _syncCart('addToCart');
 }
 
 function removeFromCart(id){
@@ -905,6 +1007,7 @@ function removeFromCart(id){
   const btn=document.getElementById('cart-'+id);
   if(btn){btn.textContent='🛒 Añadir al Carrito';btn.classList.remove('added')}
   showToast('Producto eliminado del carrito');
+  _syncCart('removeFromCart');
 }
 
 function renderCart(){
@@ -992,6 +1095,9 @@ function openTicket(){
   const total = cart.reduce((s,i)=>s+i.price, 0).toFixed(2);
   const user  = u.n ? `${u.n}#${u.d||'0'}` : 'Cliente';
 
+  // Guardar pedido en Firebase
+  _trackCheckout(cart, total);
+
   // Link directo al canal: si tenemos server ID usamos deeplink, si no el invite
   const webLink = DISCORD_SERVER_ID
     ? `https://discord.com/channels/${DISCORD_SERVER_ID}/${DISCORD_CHANNEL_ID}`
@@ -1023,6 +1129,7 @@ function openTicket(){
   setTimeout(()=>{
     cart = [];
     renderCart();
+    try { localStorage.removeItem('fb_cart'); } catch(e) {}
     ['starter','pro','leg'].forEach(id=>{
       const btn = document.getElementById('cart-'+id);
       if(btn){ btn.textContent='🛒 Añadir al Carrito'; btn.classList.remove('added'); }
@@ -1075,7 +1182,68 @@ function copyOrderMsg(){
   }).catch(()=>showToast('Selecciona el texto manualmente'));
 }
 
-// ─── TOAST ────────────
+// ─── FIREBASE SYNC ────────────────────────────────────────────────────
+let _syncTimer = null;
+function _syncCart(action) {
+  // Guardar siempre en localStorage como respaldo
+  try { localStorage.setItem('fb_cart', JSON.stringify(cart)); } catch(e) {}
+  // Debounce: esperar 400ms para no saturar Firebase con escrituras rápidas
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(() => {
+    const u = _getUser();
+    if (!u || !window._fbSaveSession) return;
+    window._fbSaveSession({
+      uid: `discord_${u.n}`,
+      username: u.n,
+      cart,
+      lastAction: action,
+      lastActionAt: new Date().toISOString()
+    });
+  }, 400);
+}
+function _getUser() {
+  try { return JSON.parse(localStorage.getItem('fb_u')); } catch(e) { return null; }
+}
+function _trackClick(product) {
+  const u = _getUser();
+  if (!u || !window._fbSaveSession) return;
+  window._fbSaveSession({
+    uid: `discord_${u.n}`,
+    username: u.n,
+    lastClick: product,
+    lastClickAt: new Date().toISOString()
+  });
+}
+function _trackCheckout(items, total) {
+  const u = _getUser();
+  if (!u || !window._fbSaveSession) return;
+  const order = {
+    items,
+    total,
+    createdAt: new Date().toISOString(),
+    orderId: `FB-${Date.now()}`
+  };
+  window._fbSaveSession({
+    uid: `discord_${u.n}`,
+    username: u.n,
+    lastOrder: order,
+    cart: []
+  });
+}
+// Restaurar carrito desde localStorage al cargar (mientras Firebase carga)
+(function restoreCart() {
+  try {
+    const saved = localStorage.getItem('fb_cart');
+    if (saved) {
+      cart = JSON.parse(saved);
+      renderCart();
+      cart.forEach(i => {
+        const btn = document.getElementById('cart-' + i.id);
+        if (btn) { btn.textContent = '✓ En el Carrito'; btn.classList.add('added'); }
+      });
+    }
+  } catch(e) {}
+})();
 function showToast(msg){
   let t=document.querySelector('.toast');
   if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t);}
