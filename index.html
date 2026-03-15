@@ -833,28 +833,97 @@ function copyText(el){
 }
  
 // ─── TICKET ───────────────────────────────────────────────────────────
-// ⚠️ Cambia esta URL por la de tu servidor de Discord (canal de tickets o bot)
-const DISCORD_TICKET_URL = 'https://discord.gg/hpY9RpGfy6';
+const DISCORD_SERVER_INVITE = 'https://discord.gg/hpY9RpGfy6';
+const DISCORD_CHANNEL_ID    = '1363664348400324728';
+const DISCORD_SERVER_ID     = '1084945507786424340';
  
 function openTicket(){
-  const u=JSON.parse(localStorage.getItem('fb_u')||'{}');
-  const items=cart.map(i=>`${i.icon} ${i.name} — $${i.price.toFixed(2)}`).join(', ');
-  const total=cart.reduce((s,i)=>s+i.price,0).toFixed(2);
-  const msg=encodeURIComponent(`🎮 NUEVO PEDIDO FORTBOOST\n👤 Usuario: ${u.n||'?'}#${u.d||'?'}\n📦 Productos: ${items}\n💰 Total: $${total}`);
-  // Abre el servidor de Discord (en Discord real usarías un bot de tickets)
-  window.open(DISCORD_TICKET_URL,'_blank');
+  const u     = JSON.parse(localStorage.getItem('fb_u') || '{}');
+  const items = cart.map(i=>`${i.icon} ${i.name} — $${i.price.toFixed(2)}`).join(' | ');
+  const total = cart.reduce((s,i)=>s+i.price, 0).toFixed(2);
+  const user  = u.n ? `${u.n}#${u.d||'0'}` : 'Cliente';
+ 
+  // Link directo al canal: si tenemos server ID usamos deeplink, si no el invite
+  const webLink = DISCORD_SERVER_ID
+    ? `https://discord.com/channels/${DISCORD_SERVER_ID}/${DISCORD_CHANNEL_ID}`
+    : DISCORD_SERVER_INVITE;
+ 
+  // Deeplink para abrir Discord app directamente en el canal (si está instalado)
+  const appLink = DISCORD_SERVER_ID
+    ? `discord://discord.com/channels/${DISCORD_SERVER_ID}/${DISCORD_CHANNEL_ID}`
+    : null;
+ 
   closeModal('checkout');
-  showToast('🎫 Redirigiendo a Discord...');
-  // Limpiar carrito tras abrir ticket
+ 
+  // Intentar abrir la app primero, con fallback a web
+  if(appLink){
+    const start = Date.now();
+    window.location.href = appLink;
+    setTimeout(()=>{
+      // Si pasó poco tiempo, la app no se abrió → abrir web
+      if(Date.now() - start < 2000) window.open(webLink, '_blank');
+    }, 1200);
+  } else {
+    window.open(webLink, '_blank');
+  }
+ 
+  // Mostrar panel de confirmación con los datos para copiar en Discord
+  showOrderConfirm(user, items, total);
+ 
+  // Limpiar carrito
   setTimeout(()=>{
-    cart=[];
+    cart = [];
     renderCart();
     ['starter','pro','leg'].forEach(id=>{
-      const btn=document.getElementById('cart-'+id);
-      if(btn){btn.textContent='🛒 Añadir al Carrito';btn.classList.remove('added')}
+      const btn = document.getElementById('cart-'+id);
+      if(btn){ btn.textContent='🛒 Añadir al Carrito'; btn.classList.remove('added'); }
     });
-    showToast('✅ Ticket creado — te esperamos en Discord');
-  },2000);
+  }, 1500);
+}
+ 
+function showOrderConfirm(user, items, total){
+  // Mensaje listo para pegar en Discord
+  const msg =
+`📦 **NUEVO PEDIDO — FortBoost**
+👤 Usuario: ${user}
+🛒 Productos: ${items}
+💰 Total pagado: $${total} USD
+🏦 Método: Transferencia Spin By Oxxo
+✅ Comprobante adjunto`;
+ 
+  // Mostrar modal de confirmación con el mensaje para copiar
+  const existing = document.getElementById('mbg-confirm');
+  if(existing) existing.remove();
+ 
+  const div = document.createElement('div');
+  div.id = 'mbg-confirm';
+  div.className = 'mbg';
+  div.innerHTML = `
+  <div class="modal" style="max-width:440px">
+    <div class="m-logo">⚡ FortBoost</div>
+    <span class="m-ic">🎫</span>
+    <div class="m-title" style="color:#00dcff">¡Abriendo Discord!</div>
+    <div class="m-sub">Copia este mensaje y pégalo en el canal de tickets para que el staff te atienda al instante.</div>
+    <div style="background:rgba(0,0,0,.35);border:1px solid rgba(0,220,255,.2);border-radius:8px;padding:1rem;text-align:left;margin-bottom:1.2rem">
+      <pre id="orderMsg" style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,.75);white-space:pre-wrap;line-height:1.6;margin:0">${msg}</pre>
+    </div>
+    <button onclick="copyOrderMsg()" style="width:100%;background:linear-gradient(135deg,#00dcff,#7c3aed);color:#fff;border:none;border-radius:6px;padding:13px;font-family:'Bebas Neue',cursive;font-size:19px;letter-spacing:3px;cursor:pointer;margin-bottom:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      📋 Copiar Mensaje
+    </button>
+    <button onclick="document.getElementById('mbg-confirm').classList.remove('open')" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:6px;padding:10px;font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.05)'">
+      ✓ Listo, ya lo pegué
+    </button>
+  </div>`;
+  document.body.appendChild(div);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ div.classList.add('open'); }); });
+  div.addEventListener('click', e=>{ if(e.target===div) div.classList.remove('open'); });
+}
+ 
+function copyOrderMsg(){
+  const txt = document.getElementById('orderMsg').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    showToast('📋 Mensaje copiado — pégalo en Discord');
+  }).catch(()=>showToast('Selecciona el texto manualmente'));
 }
  
 // ─── TOAST ────────────────────────────────────────────────────────────
