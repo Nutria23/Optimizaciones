@@ -659,11 +659,75 @@ footer{border-top:1px solid rgba(255,255,255,.04);padding:2.8rem 2rem;text-align
     FortBoost
   </span>
   <div class="f-links">
-    <a href="#">Términos</a><a href="#">Privacidad</a>
-    <a href="#">Reembolsos</a><a href="#">Discord</a><a href="#">Contacto</a>
+    <a href="#" onclick="openModal('terminos');return false;">Términos</a>
+    <a href="#" onclick="openModal('privacidad');return false;">Privacidad</a>
+    <a href="#" onclick="openModal('reembolsos');return false;">Reembolsos</a>
+    <a href="https://discord.gg/Hv4b9a4RjM" target="_blank" rel="noopener">Discord</a>
+    <a href="#" onclick="window.location.href='mailto:centenario5647@gmail.com';return false;">Contacto</a>
   </div>
   <p class="f-copy">No afiliado con Epic Games · Fortnite® es marca registrada de Epic Games, Inc. · © 2026 FortBoost</p>
 </footer>
+</div>
+
+<!-- ── MODAL TÉRMINOS ── -->
+<div class="mbg" id="mbg-terminos" onclick="if(event.target===this)closeModal('terminos')">
+  <div class="modal">
+    <button class="m-close" onclick="closeModal('terminos')">✕</button>
+    <div class="m-logo">FortBoost</div>
+    <span class="m-ic">📄</span>
+    <div class="m-title">Términos de Servicio</div>
+    <div style="text-align:left;font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;margin-top:1rem">
+      <p style="font-weight:700;color:var(--c);font-size:14px;margin-bottom:.5rem">Términos de Producto de Optimización</p>
+      <p style="margin-bottom:.8rem"><strong>1. Servicio prestado.</strong> FortBoost ofrece servicios de optimización de rendimiento (FPS) para el videojuego Fortnite. El servicio consiste en la configuración y ajuste de parámetros del sistema del cliente para maximizar el rendimiento gráfico.</p>
+      <p style="margin-bottom:.8rem"><strong>2. No afiliación.</strong> FortBoost no está afiliado, patrocinado ni respaldado por Epic Games, Inc. Fortnite® es marca registrada de Epic Games, Inc.</p>
+      <p style="margin-bottom:.8rem"><strong>3. Entrega.</strong> El servicio se entrega de forma digital a través del canal de tickets en nuestro servidor de Discord. El tiempo de entrega estimado es de 24 a 48 horas hábiles tras confirmación de pago.</p>
+      <p style="margin-bottom:.8rem"><strong>4. Responsabilidad.</strong> El cliente acepta que los resultados de optimización pueden variar según las especificaciones de hardware. FortBoost no garantiza un incremento específico de FPS.</p>
+      <p style="margin-bottom:.8rem"><strong>5. Uso.</strong> El servicio es para uso personal e intransferible. Queda prohibida la reventa o distribución de los archivos entregados.</p>
+      <p style="margin-bottom:.8rem"><strong>6. Modificaciones.</strong> FortBoost se reserva el derecho de modificar estos términos en cualquier momento. El uso continuado del servicio implica aceptación de los términos vigentes.</p>
+      <p style="color:rgba(255,255,255,.35);font-size:11px;margin-top:1rem">Última actualización: enero 2026</p>
+    </div>
+    <button onclick="closeModal('terminos')" style="margin-top:1.4rem;width:100%;padding:.85rem 1.5rem;background:linear-gradient(135deg,#00dcff,#5865f2);border:none;border-radius:10px;color:#fff;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 4px 20px rgba(0,220,255,.3)" onmouseover="this.style.opacity='.85';this.style.transform='translateY(-2px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">✔ ENTENDIDO</button>
+  </div>
+</div>
+
+<!-- ── MODAL PRIVACIDAD ── -->
+<div class="mbg" id="mbg-privacidad" onclick="if(event.target===this)closeModal('privacidad')">
+  <div class="modal">
+    <button class="m-close" onclick="closeModal('privacidad')">✕</button>
+    <div class="m-logo">FortBoost</div>
+    <span class="m-ic">🔒</span>
+    <div class="m-title">Política de Privacidad</div>
+    <div style="text-align:left;font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;margin-top:1rem">
+      <p style="font-weight:700;color:var(--c);font-size:14px;margin-bottom:.5rem">Tratamiento de Datos Personales</p>
+      <p style="margin-bottom:.8rem"><strong>1. Datos que recopilamos.</strong> Al iniciar sesión con Discord, recopilamos tu nombre de usuario, discriminador y avatar público. No almacenamos contraseñas ni datos de pago.</p>
+      <p style="margin-bottom:.8rem"><strong>2. Uso de datos.</strong> Los datos se utilizan exclusivamente para identificarte como cliente, gestionar tu pedido y brindarte soporte técnico a través de Discord.</p>
+      <p style="margin-bottom:.8rem"><strong>3. Compartir información.</strong> No vendemos, cedemos ni compartimos tus datos personales con terceros bajo ninguna circunstancia.</p>
+      <p style="margin-bottom:.8rem"><strong>4. Cookies.</strong> Usamos almacenamiento local del navegador únicamente para mantener tu sesión activa. No empleamos cookies de rastreo ni publicidad.</p>
+      <p style="margin-bottom:.8rem"><strong>5. Seguridad.</strong> Implementamos medidas técnicas razonables para proteger tu información. Sin embargo, ninguna transmisión por internet es 100% segura.</p>
+      <p style="margin-bottom:.8rem"><strong>6. Tus derechos.</strong> Puedes solicitar la eliminación de tus datos en cualquier momento contactándonos a <strong>centenario5647@gmail.com</strong>.</p>
+      <p style="color:rgba(255,255,255,.35);font-size:11px;margin-top:1rem">Última actualización: enero 2026</p>
+    </div>
+    <button onclick="closeModal('privacidad')" style="margin-top:1.4rem;width:100%;padding:.85rem 1.5rem;background:linear-gradient(135deg,#00dcff,#5865f2);border:none;border-radius:10px;color:#fff;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 4px 20px rgba(0,220,255,.3)" onmouseover="this.style.opacity='.85';this.style.transform='translateY(-2px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">✔ ENTENDIDO</button>
+  </div>
+</div>
+
+<!-- ── MODAL REEMBOLSOS ── -->
+<div class="mbg" id="mbg-reembolsos" onclick="if(event.target===this)closeModal('reembolsos')">
+  <div class="modal">
+    <button class="m-close" onclick="closeModal('reembolsos')">✕</button>
+    <div class="m-logo">FortBoost</div>
+    <span class="m-ic">🚫</span>
+    <div class="m-title">Política de Reembolsos</div>
+    <div style="text-align:left;font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;margin-top:1rem">
+      <p style="font-weight:700;color:#ff4757;font-size:15px;margin-bottom:.8rem;text-align:center">No se realizan reembolsos bajo ninguna circunstancia.</p>
+      <p style="margin-bottom:.8rem"><strong>1. Política estricta.</strong> Todos los pagos realizados a FortBoost son <strong>definitivos e irrevocables</strong>. No se aceptan solicitudes de devolución por ningún motivo una vez confirmado el pago.</p>
+      <p style="margin-bottom:.8rem"><strong>2. Naturaleza del servicio.</strong> Al tratarse de un servicio digital personalizado e intangible, no es posible "devolver" el producto una vez entregado o en proceso de entrega.</p>
+      <p style="margin-bottom:.8rem"><strong>3. Responsabilidad del cliente.</strong> El cliente es responsable de leer y entender estos términos antes de realizar cualquier pago. El hecho de completar la transferencia implica plena aceptación de esta política.</p>
+      <p style="margin-bottom:.8rem"><strong>4. Soporte.</strong> Si tienes algún problema con el servicio recibido, contáctanos a través de Discord o al correo <strong>centenario5647@gmail.com</strong> y buscaremos una solución dentro de nuestras posibilidades.</p>
+      <p style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.25);border-radius:8px;padding:.8rem 1rem;margin-top:1rem;font-size:12px;color:rgba(255,255,255,.6)">⚠️ Al realizar tu pago confirmas haber leído y aceptado esta política sin excepción.</p>
+    </div>
+    <button onclick="closeModal('reembolsos')" style="margin-top:1.4rem;width:100%;padding:.85rem 1.5rem;background:linear-gradient(135deg,#ff4757,#c0392b);border:none;border-radius:10px;color:#fff;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 4px 20px rgba(255,71,87,.35)" onmouseover="this.style.opacity='.85';this.style.transform='translateY(-2px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">✔ ENTENDIDO</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
